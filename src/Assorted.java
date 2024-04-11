@@ -293,16 +293,33 @@ public class Assorted {
      *              filterNTimes([20,37,20,21], 1) returns [20,37,21]
      */
     public static List<Integer> filterNTimes(List<Integer> list, int n) {
-        List<Integer> finalList = new ArrayList<>();
         List<Integer> arrayList = new ArrayList<>();
 
+        int highestValue = 0;
+
         for(int element: list){
-            if(){
-                arrayList.add(element);
+            if(element>highestValue){
+                highestValue = element;
             }
         }
 
-        return finalList;
+        int[][] valueCount = new int[highestValue+1][2];
+
+        for(int j = 1; j < list.size(); j++){
+            if(valueCount[list.get(j-1)][1] > n){
+                valueCount[list.get(j-1)][1] += 1;
+            }
+        }
+
+        System.out.println(Arrays.toString(valueCount));
+
+        for(int i = 0; i<list.size(); i++){
+            if(valueCount[list.get(i)][1] > n){
+                arrayList.remove(i);
+            }
+        }
+
+        return arrayList;
 
         //
     }
