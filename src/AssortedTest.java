@@ -196,8 +196,8 @@ class AssortedTest {
     @org.junit.jupiter.api.Test
     void wildWest() {
 
-        List<String> list = new ArrayList(Arrays.asList("NORTH", "SOUTH", "EAST", "WEST"));
-        List<String> list2 = new ArrayList(Arrays.asList("NORTH", "EAST", "WEST", "SOUTH", "WEST", "WEST"));
+        List<String> list = new ArrayList(Arrays.asList("NORTH", "SOUTH", "EAST", "WEST")); //0
+        List<String> list2 = new ArrayList(Arrays.asList("NORTH", "EAST", "WEST", "SOUTH", "WEST", "WEST")); //
         List<String> list3 = new ArrayList(Arrays.asList("NORTH", "NORTH", "EAST", "EAST", "NORTH", "WEST", "SOUTH", "WEST", "WEST"));
         List<String> list4 = new ArrayList(Arrays.asList("NORTH", "NORTH", "NORTH", "SOUTH", "SOUTH", "EAST", "WEST", "SOUTH", "WEST", "WEST"));
 
