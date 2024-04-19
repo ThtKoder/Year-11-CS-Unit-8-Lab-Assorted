@@ -221,54 +221,30 @@ public class Assorted {
      *         e.g. uniqueNumber(1,10) returns [1,2,3,4,5,6,7,8,9]
      *              uniqueNumber(1,100) returns [1,2,3,4,5,6,7,8,9,89]
      */
+
     public static List<Integer> uniqueNumber(int lowerBound, int upperBound) {
-        List<Integer> totalNumbers = new ArrayList<>();
-
-        for(int i = 0; i < lowerBound + upperBound; i++){
-            totalNumbers.add(i);
-        }
-
-        List<Integer> placePoweredList = new ArrayList<>();
         List<Integer> uniqueNumberList = new ArrayList<>();
 
-        // 89 = 8^1 + 9^2 or 2^1
-        // 8^1
-        // 9^2
-        for(int p = 1; p < 10; p++) {
-            for (int o = 1; o < 10; o++) {
-                placePoweredList.add(o^p);
+        for(int i = lowerBound; i <= upperBound; i++){
+            int sum = 0;
+            int number = i;
+
+            int length = (int)(Math.log10(number)+1);
+            //with the help of ChatGPT resolved this issue
+            //i.e. had to be log() instead of modulo div
+            //to find the total length of the number
+            //(how many place values there are)
+
+            while(number > 0) {
+                int placeValue = number % 10;
+                sum += (int) Math.pow(placeValue , length);
+                number /= 10;
+                length--;
+            }
+            if(sum == i){
+                uniqueNumberList.add(i);
             }
         }
-
-        System.out.println(placePoweredList);
-
-        /*for(int k : totalNumbers){
-            if(k / 10 % 10 = ){
-                k++;
-            }
-            else{
-                totalNumbers.remove(k);
-            }
-        }*/
-
-        //System.out.println(upperBound%100);
-        //System.out.println(upperBound%10);
-        //System.out.println(upperBound%1);
-
-        for(int j = 0; j < lowerBound+upperBound; j++) {
-            if (placePoweredList.contains(j)) {
-                placePoweredList.add(j);
-            }
-        }
-
-        System.out.println(uniqueNumberList);
-
-        /*for(int iterate : uniqueNumberList){
-            for(iterate%10)
-        }*/
-
-        //check for
-        //System.out.println(uniqueNumberList);
 
         return uniqueNumberList;
     }
@@ -295,6 +271,8 @@ public class Assorted {
     public static List<Integer> filterNTimes(List<Integer> list, int n) {
         List<Integer> arrayList = new ArrayList<>();
 
+        //array of
+
         int highestValue = 0;
 
         for(int element: list){
@@ -302,22 +280,36 @@ public class Assorted {
                 highestValue = element;
             }
         }
+        //finds the largest value in the list
 
-        int[][] valueCount = new int[highestValue+1][2];
+        int[][] valueCount = new int[highestValue][1];
+        //creates a 2d array of size highest value for rows and then 1 for columns:
+        //i.e. highestValue = 2 -> []
+        //                         []
+        //
 
-        for(int j = 1; j < list.size(); j++){
-            if(valueCount[list.get(j-1)][1] > n){
-                valueCount[list.get(j-1)][1] += 1;
+        // Loop through all rows - a print method i found online, because I was too lazy to
+        //realize that I had used them before in this lab
+        for (int i = 0; i < valueCount.length; i++) {
+
+            // Loop through all elements of current row
+            for (int j = 0; j < valueCount[i].length; j++){
+                System.out.print(valueCount[i][j] + " ");
+
             }
         }
 
-        System.out.println(Arrays.toString(valueCount));
+        for (int i = 0; i < list.size(); i++) {
+            int element = list.get(i);
+            valueCount[element - 1][0]++; //pretty straightforward, incrementing the array that holds
+            //how many times the element has been added to a new array up each time, according to the old list
 
-        for(int i = 0; i<list.size(); i++){
-            if(valueCount[list.get(i)][1] > n){
-                arrayList.remove(i);
+            if (valueCount[element - 1][0] <= n) {
+                arrayList.add(element); //then putting it into the new list!
             }
         }
+
+        System.out.println(arrayList);
 
         return arrayList;
 
@@ -380,53 +372,23 @@ public class Assorted {
             }
         }
 
-        if(northMentionsInt == southMentionsInt && eastMentionsInt == westMentionsInt){
-            return simplifiedDirections;
-        }
+        int verticalTotal = northMentionsInt - southMentionsInt;
+        int horizontalTotal = eastMentionsInt - westMentionsInt;
 
-        if(northMentionsInt == southMentionsInt + 1 && eastMentionsInt == westMentionsInt){
-            simplifiedDirections.add("NORTH");
-            return simplifiedDirections;
-        }
-        if(southMentionsInt == northMentionsInt + 1 && eastMentionsInt == westMentionsInt){
-            simplifiedDirections.add("SOUTH");
-            return simplifiedDirections;
-        }
-        if(eastMentionsInt == westMentionsInt + 1 && northMentionsInt == southMentionsInt){
-            simplifiedDirections.add("EAST");
-            return simplifiedDirections;
-        }
-        if(westMentionsInt == eastMentionsInt + 1 && northMentionsInt == southMentionsInt){
-            simplifiedDirections.add("WEST");
-            return simplifiedDirections;
-        }
-
-        int[][] northMentions = new int[1][northMentionsInt];
-        int[][] southMentions = new int[1][southMentionsInt];
-        int[][] eastMentions = new int[1][eastMentionsInt];
-        int[][] westMentions = new int[1][westMentionsInt];
-
-        //[instances][positions]
-
-        int northTotal = northMentionsInt-southMentionsInt;
-        int southTotal = southMentionsInt-northMentionsInt;
-        int eastTotal = eastMentionsInt-westMentionsInt;
-        int westTotal = westMentionsInt-eastMentionsInt;
-
-        while(northTotal > southTotal){
-            southTotal++;
+        while(verticalTotal > 0){
+            verticalTotal--;
             simplifiedDirections.add("NORTH");
         }
-        while(southTotal > northTotal){
-            northTotal++;
+        while(verticalTotal < 0){
+            verticalTotal++;
             simplifiedDirections.add("SOUTH");
         }
-        while(eastTotal > westTotal){
-            westTotal++;
+        while(horizontalTotal > 0){
+            horizontalTotal--;
             simplifiedDirections.add("EAST");
         }
-        while(westTotal > eastTotal){
-            eastTotal++;
+        while(horizontalTotal < 0){
+            horizontalTotal++;
             simplifiedDirections.add("WEST");
         }
 
@@ -455,29 +417,26 @@ public class Assorted {
      *              queueTime([2,3,10], 2) returns 12
      */
     public static int queueTime(List<Integer> queue, int tillsOpen) {
-        /**
-         * if one customer need 10 mins, then others can go to other tills
-         */
-
         int[] tillsOpenArr = new int[tillsOpen];
 
-        int totalQueue = 0;
-
-        //total queues
-        //iterate through customers?
-        //
-
-        //for(int iterate : tillsOpenArr[])
-
-        for (int inLine : queue) {
-            totalQueue += inLine;
+        for (int i = 0; i < queue.size(); i++) {
+            int min = 0;
+            for (int j = 0; j < tillsOpen; j++) {
+                if (tillsOpenArr[j] < tillsOpenArr[min]) {
+                    min = j;
+                }
+            }
+            tillsOpenArr[min] += queue.get(i); //looping from the queue as equally as possible
         }
 
-        //get the largest customer number, and then add up the other
+        int wait = tillsOpenArr[0];
+        for (int i = 1; i < tillsOpen; i++) {
+            if (tillsOpenArr[i] > wait) {
+                wait = tillsOpenArr[i]; //looping through the wait
+            }
+        }
 
-        System.out.println(totalQueue);
-        System.out.println(totalQueue/tillsOpen);
-        return totalQueue / tillsOpen;
-
+        return wait;
     }
+
 }
